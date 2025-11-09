@@ -20,7 +20,14 @@ my_posts = [
     {"title": "favourite game", "content": "Call of duty is best one", "id": 7},
      {"title": "Caps for sale", "content": "Buy one get one free just for 9$", "id": 3},
      {"title": "Top highways in the world", "content": "highways ", "id": 5},
+      {"title": "importance of poetry", "content": "highways ", "id": 78}
       ]
+
+
+def post_index(id):
+    for i, p in enumerate(my_posts):
+        if p['id'] == id:
+            return i
     
 
 @app.get("/posts")
@@ -52,6 +59,8 @@ def get_post (id: int, response: Response):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail= f"post with id {id} was not found")
         
             
-        
-        
-
+@app.delete("/posts/{id}")
+def delete_post(id: int):
+   index = post_index(id)
+   my_posts.pop(index)
+   return {"message": "post deletd successfully deleted"}
