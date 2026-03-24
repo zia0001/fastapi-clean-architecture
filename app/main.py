@@ -7,11 +7,20 @@ from sqlalchemy.orm import Session
 from app import schemas
 from .import models 
 from .database import engine, get_db
+from fastapi.middleware.cors import CORSMiddleware
 
 models.Base.metadata.create_all(bind=engine)
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # For development only
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 
@@ -45,6 +54,7 @@ def create_post(post: schemas.PostCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_post)  # fetch created post with ID
     return new_post
+
 
 
 @app.get("/posts/latest", response_model=schemas.PostResponse)
